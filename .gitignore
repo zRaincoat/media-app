@@ -1,0 +1,44 @@
+# Ignore build and compiled files
+target/
+build/
+out/
+
+# Ignore Maven Wrapper files except for the required JAR
+.mvn/
+!mvnw
+!mvnw.cmd
+!.mvn/wrapper/maven-wrapper.jar
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.classpath
+*.project
+*.factorypath
+*.settings/
+.springBeans
+.sts4-cache
+
+# Ignore logs and temporary files
+logs/
+*.log
+*.bak
+*.swp
+*.swo
+
+# Ignore sensitive config files (DO NOT commit secrets)
+application.properties
+application.yml
+.env
+
+# Ignore test coverage reports
+*.lcov
+coverage/
+test-output/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db

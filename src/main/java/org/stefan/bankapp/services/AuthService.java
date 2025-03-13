@@ -10,7 +10,7 @@ import org.stefan.bankapp.models.User;
 public interface AuthService {
     void register(RegisterRequestDto registerRequestDto);
 
-    void login(@Valid LoginRequestDto loginRequestDto);
+    void login(@Valid LoginRequestDto loginRequestDto, HttpServletRequest request);
 
     void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 

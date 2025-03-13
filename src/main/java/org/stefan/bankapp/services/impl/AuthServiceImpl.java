@@ -3,7 +3,10 @@ package org.stefan.bankapp.services.impl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,11 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.stefan.bankapp.dtos.requests.LoginRequestDto;
 import org.stefan.bankapp.dtos.requests.RegisterRequestDto;
-import org.stefan.bankapp.exceptions.EmailAlreadyExistsException;
+import org.stefan.bankapp.exceptions.AlreadyExistsException;
 import org.stefan.bankapp.mappers.UserMapper;
 import org.stefan.bankapp.models.User;
 import org.stefan.bankapp.services.AuthService;
@@ -25,7 +29,10 @@ import org.stefan.bankapp.services.UserService;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UserService userService;
+    @Autowired
+    @Lazy
+    private UserService userService;
+
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -34,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void register(RegisterRequestDto registerRequestDto) {
         if (userService.existsByEmail(registerRequestDto.getEmail())) {
-            throw new EmailAlreadyExistsException("Email already exists");
+            throw new AlreadyExistsException("Email already exists");
         }
         User user = userMapper.mapToModel(registerRequestDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -42,11 +49,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void login(LoginRequestDto loginRequestDto) {
+    public void login(LoginRequestDto loginRequestDto, HttpServletRequest request) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(auth);
+        HttpSession session = request.getSession(true);
+        session.setAttribute(
+                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                SecurityContextHolder.getContext()
+        );
     }
 
     @Override
@@ -68,10 +80,8 @@ public class AuthServiceImpl implements AuthService {
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
         }
-
         Object principal = authentication.getPrincipal();
         String email;
-
         if (principal instanceof UserDetails) {
             email = ((UserDetails) principal).getUsername();
         } else {

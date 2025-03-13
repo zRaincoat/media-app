@@ -1,7 +1,6 @@
 package org.stefan.bankapp.dtos.requests;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -14,33 +13,30 @@ import org.stefan.bankapp.enums.Gender;
 @Data
 public class RegisterRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     @Size(min = 2, max = 50)
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     @Size(min = 2, max = 50)
     private String surname;
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     @Size(min = 4)
     private String password;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "must not be blank")
+    @Email(message = "must be a valid email")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "must not be blank")
     @Pattern(regexp = "\\+?[0-9]{10,15}")
     private String phoneNumber;
 
-    @Min(16)
-    private int age;
-
-    @NotNull
+    @NotNull(message = "must not be null")
     private Gender gender;
 
-    @NotNull
-    @Past
+    @NotNull(message = "must not be null")
+    @Past(message = "must be in the past")
     private LocalDate birthDate;
 }

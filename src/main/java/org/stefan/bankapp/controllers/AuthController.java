@@ -2,6 +2,7 @@ package org.stefan.bankapp.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,15 +27,16 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public String register(@RequestBody final RegisterRequestDto registerRequestDto) {
+    public String register(@Valid @RequestBody final RegisterRequestDto registerRequestDto) {
         authService.register(registerRequestDto);
         log.info("User with email: {} has been successfully registered", registerRequestDto.getEmail());
         return "Registration successful. Please, login.";
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody final LoginRequestDto loginRequestDto) {
-        authService.login(loginRequestDto);
+    public String login(@Valid @RequestBody final LoginRequestDto loginRequestDto,
+                        HttpServletRequest request) {
+        authService.login(loginRequestDto, request);
         log.info("User with email: {} has been logged in", loginRequestDto.getEmail());
         return "Login successful.";
     }

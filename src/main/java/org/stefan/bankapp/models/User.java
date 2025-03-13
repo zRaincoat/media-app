@@ -8,14 +8,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -24,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.stefan.bankapp.enums.Gender;
 
 @Entity
@@ -34,44 +30,29 @@ import org.stefan.bankapp.enums.Gender;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends AbstractEntity {
-
-    @NotBlank
-    @Size(min = 2, max = 50)
+    @Column(nullable = false)
     private String name;
-
-    @NotBlank
-    @Size(min = 2, max = 50)
+    @Column(nullable = false)
     private String surname;
-
-    @NotBlank
-    @Size(min = 4)
+    @Column(nullable = false)
     private String password;
-
-    @NotBlank
-    @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
-
-    @NotBlank
-    @Pattern(regexp = "\\+?[0-9]{10,15}")
     @Column(unique = true)
     private String phoneNumber;
-
-    @Min(16)
-    private int age;
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-    @NotNull
-    @Past
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     private LocalDate birthDate;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDate createdAt;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<PlayList> playLists = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cards = new ArrayList<>();
+    public static int calculateAgeByBirthDate(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
 }

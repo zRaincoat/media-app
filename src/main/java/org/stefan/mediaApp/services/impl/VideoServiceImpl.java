@@ -1,17 +1,13 @@
 package org.stefan.mediaApp.services.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.stefan.mediaApp.dtos.requests.VideoRequestDto;
 import org.stefan.mediaApp.dtos.requests.VideoUpdateRequestDto;
 import org.stefan.mediaApp.dtos.responses.VideoFullInfoResponseDto;
-import org.stefan.mediaApp.dtos.responses.VideoResponseDto;
 import org.stefan.mediaApp.mappers.VideoMapper;
 import org.stefan.mediaApp.models.PlayList;
 import org.stefan.mediaApp.models.User;
@@ -91,27 +87,4 @@ public class VideoServiceImpl implements VideoService {
         int playListVideoCount = videoRepository.getPlayListVideoCount(video.getPlayList().getId());
         return videoMapper.mapToFullInfoResponseDto(video, playListVideoCount);
     }
-
-    @Override
-    public List<VideoResponseDto> getVideosInfoByPlayListId(UUID playListId) {
-        return videoRepository.getVideosInfoByPlayListId(playListId).stream()
-                .map(videoMapper::mapToResponseDto)
-                .toList();
-    }
-
-    @Override
-    public List<VideoResponseDto> getVideosInfoByUserId(UUID userId) {
-        return videoRepository.getVideosWithPlayListsByUserId(userId).stream()
-                .map(videoMapper::mapToResponseDto)
-                .toList();
-    }
-
-    @Override
-    public Map<UUID, List<Video>> getPlayListIdsToVideosByUserId(UUID userId) {
-        return videoRepository.getVideosWithPlayListsByUserId(userId).stream()
-                .collect(Collectors.groupingBy(video -> video.getPlayList().getId()));
-    }
-
-
-
 }

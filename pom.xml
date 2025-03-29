@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>org.stefan</groupId>
-    <artifactId>bankapp</artifactId>
+    <artifactId>mediaApp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>bankapp</name>
     <description>bankapp</description>

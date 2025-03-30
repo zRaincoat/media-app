@@ -18,7 +18,7 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
             FROM Notification n
             WHERE n.user = :user
               AND n.deletedAt IS NULL
-            ORDER BY n.createdAt
+            ORDER BY n.createdAt DESC
             """)
     Page<Notification> getAllNotificationsByUser(User user, Pageable pageable);
 

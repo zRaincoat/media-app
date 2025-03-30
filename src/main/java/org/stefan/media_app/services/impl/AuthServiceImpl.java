@@ -1,18 +1,13 @@
 package org.stefan.media_app.services.impl;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
@@ -29,13 +24,12 @@ import org.stefan.media_app.services.UserService;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    @Lazy
-    private UserService userService;
-
+    private final UserService userService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final SecurityUtil securityUtil;
+    private final LogoutUtil logoutUtil;
 
     @Transactional
     @Override
@@ -62,32 +56,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        httpServletRequest.getSession().invalidate();
-        SecurityContextHolder.clearContext();
-
-        Cookie cookie = new Cookie("JSESSIONID", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        httpServletResponse.addCookie(cookie);
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        logoutUtil.logout(request, response);
     }
 
     @Override
-    public User getCurrentlyAuthentificatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthenticationCredentialsNotFoundException("No authenticated user found");
-        }
-        Object principal = authentication.getPrincipal();
-        String email;
-        if (principal instanceof UserDetails) {
-            email = ((UserDetails) principal).getUsername();
-        } else {
-            email = principal.toString();
-        }
-
-        return userService.getByEmailAndDeletedAtIsNull(email);
+    public User getCurrentlyAuthenticatedUser() {
+        return securityUtil.getCurrentUser();
     }
 }

@@ -20,6 +20,7 @@ public class NotificationMapper {
                 .id(notification.getId())
                 .createdAt(notification.getCreatedAt())
                 .updatedAt(notification.getUpdatedAt())
+                .isRead(notification.isRead())
                 .video(videoMapper.mapToLowInfoResponseDto(notification.getVideo()))
                 .build();
     }

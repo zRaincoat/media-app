@@ -1,0 +1,465 @@
+{
+	"info": {
+		"_postman_id": "4bbfb272-1b5b-42a5-8f3a-3a1d12f3de96",
+		"name": "video platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37580004"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"new Account\",\r\n    \"surname\": \"Stefan\",\r\n    \"password\": \"12345\",\r\n    \"email\": \"stefan@gmail.com\",\r\n    \"phoneNumber\": \"+380999999999\",\r\n    \"age\": 18,\r\n    \"gender\": \"MALE\",\r\n    \"birthDate\": \"1994-01-15\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"stefan@gmail.com\",\r\n    \"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "basic"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/auth/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "play list",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"science\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/play-lists",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"play-lists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/play-lists/38285201-7a65-4850-811b-350ec2d65cef",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"play-lists",
+								"38285201-7a65-4850-811b-350ec2d65cef"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/play-lists/8d3fbbe3-fea8-4dee-8732-d712845fc06b",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"play-lists",
+								"8d3fbbe3-fea8-4dee-8732-d712845fc06b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"pets playlist\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/play-lists/38285201-7a65-4850-811b-350ec2d65cef",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"play-lists",
+								"38285201-7a65-4850-811b-350ec2d65cef"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/me",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update me",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Stefan Is a Cool Guy\",\r\n    \"surname\": \"Bambo\",\r\n    \"email\": \"stefan@gmail.com\",\r\n    \"phoneNumber\": \"+380991111111\",\r\n    \"gender\": \"MALE\",\r\n    \"birthDate\": \"1994-01-15\"   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/cb4d4492-b335-47c6-a795-e47ddb3ed4b2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"cb4d4492-b335-47c6-a795-e47ddb3ed4b2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/users/cb4d4492-b335-47c6-a795-e47ddb3ed4b2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"cb4d4492-b335-47c6-a795-e47ddb3ed4b2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "video",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"playListId\": \"dcb1bd15-2cd9-47c8-938b-85f43cf42a9f\",\r\n    \"title\": \"Phisics\",\r\n    \"url\": \"https://www.youtube.com/channel/UCWfhBu4fAt126ZbxREz3IBw\",\r\n    \"description\": \"Сьогодні вчимо механіку, бо вона кльова\",\r\n    \"categories\": [\"EDUCATION\", \"SCIENCE\", \"TECHNOLOGY\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/videos",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/videos/cdb47123-c5f8-4359-96d2-752e1dd8dd46",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos",
+								"cdb47123-c5f8-4359-96d2-752e1dd8dd46"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/videos/cfe62d29-ce07-4b50-b815-82b14549d771/likes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos",
+								"cfe62d29-ce07-4b50-b815-82b14549d771",
+								"likes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "dislike",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/videos/86c1ab23-6c48-45c7-ac93-85c955d7d136/dislikes",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos",
+								"86c1ab23-6c48-45c7-ac93-85c955d7d136",
+								"dislikes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/videos/cdb47123-c5f8-4359-96d2-752e1dd8dd46",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos",
+								"cdb47123-c5f8-4359-96d2-752e1dd8dd46"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Video of kitties 2.0\",\r\n    \"url\": \"https://www.youtube.com/watch?v=y0sF5xhGreA\",\r\n    \"description\": \"For the spoiling, nurturing and whole-heartedly pet-obsessed, The Pet Collective is a playground that cultivates community, promotes joyful moments, and fuels your pet lifestyle.\",\r\n    \"categories\": [\"LIFESTYLE\", \"PETS\", \"NATURE\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/videos/cdb47123-c5f8-4359-96d2-752e1dd8dd46",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos",
+								"cdb47123-c5f8-4359-96d2-752e1dd8dd46"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all videos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/videos?sort=LIKES_ASC",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"videos"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "LIKES_ASC"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notification",
+			"item": [
+				{
+					"name": "notifications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/notifications",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -3,6 +3,7 @@ package org.stefan.media_app.repositories;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.stefan.media_app.models.User;
@@ -56,4 +57,20 @@ public interface VideoRepository extends JpaRepository<Video, UUID> {
               AND v.playList.deletedAt IS NULL
             """)
     List<Video> findByPlayListId(UUID playListId);
+
+    @Query("""
+            SELECT v
+            FROM Video v
+            WHERE v.deletedAt IS NULL
+            """)
+    List<Video> findAllSorted(Sort sort);
+
+    @Query("""
+            SELECT v
+            FROM Video v
+            LEFT JOIN FETCH v.playList p
+            LEFT JOIN FETCH p.author a
+            WHERE v IN :videos
+            """)
+    List<Video> fetchWithPlayListsAndAuthors(List<Video> videos);
 }

@@ -15,7 +15,6 @@ import org.stefan.media_app.dtos.responses.UserWithAllDataResponseDto;
 import org.stefan.media_app.mappers.UserMapper;
 import org.stefan.media_app.models.User;
 import org.stefan.media_app.repositories.UserRepository;
-import org.stefan.media_app.services.AuthService;
 import org.stefan.media_app.services.PlayListService;
 import org.stefan.media_app.services.UserService;
 
@@ -25,8 +24,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final AuthService authService;
     private final PlayListService playListService;
+    private final SecurityUtil securityUtil;
+    private final LogoutUtil logoutUtil;
 
     @Override
     public boolean existsByEmail(String email) {
@@ -41,21 +41,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmailAndDeletedAtIsNull(String email) {
         return userRepository.findByEmailAndDeletedAtIsNull(email)
-                .orElseThrow(() -> new EntityNotFoundException("User with email" + email + "not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
     }
 
     @Override
     @Transactional
     public void updateRegisteredUser(UserRequestDto requestDto) {
-        User authUser = authService.getCurrentlyAuthentificatedUser();
+        User authUser = securityUtil.getCurrentUser();
         setFields(requestDto, authUser);
     }
 
     @Override
     @Transactional
-    public void deleteAuthUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        User authUser = authService.getCurrentlyAuthentificatedUser();
-        authService.logout(httpServletRequest, httpServletResponse);
+    public void deleteAuthUser(HttpServletRequest request, HttpServletResponse response) {
+        logoutUtil.logout(request, response);
+        User authUser = securityUtil.getCurrentUser();
         authUser.softDelete();
     }
 
@@ -63,13 +63,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getUserById(UUID id) {
         User user = userRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id" + id + "not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
         return userMapper.mapToResponseDto(user);
     }
 
     @Override
     public UserWithAllDataResponseDto getMe() {
-        User user = authService.getCurrentlyAuthentificatedUser();
+        User user = securityUtil.getCurrentUser();
         List<PlayListResponseDto> playLists = playListService.getAllPlayListsInfoByUser(user.getId());
         return userMapper.mapToWithAllDataResponseDto(user, playLists);
     }

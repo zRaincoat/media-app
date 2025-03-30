@@ -24,7 +24,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     public Page<NotificationResponseDto> getNotificationsByAuthUser(Pageable pageable) {
-        User user = authService.getCurrentlyAuthentificatedUser();
+        User user = authService.getCurrentlyAuthenticatedUser();
         Page<Notification> notificationsPage = notificationRepository.getAllNotificationsByUser(user, pageable);
         notificationRepository.fetchAllWithVideos(notificationsPage.getContent());
         notificationRepository.setAllNotificationsIsReadTrue(notificationsPage.getContent().stream().map(AbstractEntity::getId).toList());

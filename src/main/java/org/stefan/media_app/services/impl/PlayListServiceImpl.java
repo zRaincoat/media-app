@@ -18,7 +18,6 @@ import org.stefan.media_app.models.PlayList;
 import org.stefan.media_app.models.User;
 import org.stefan.media_app.models.Video;
 import org.stefan.media_app.repositories.PlayListRepository;
-import org.stefan.media_app.services.AuthService;
 import org.stefan.media_app.services.PlayListService;
 
 @Service
@@ -26,7 +25,7 @@ import org.stefan.media_app.services.PlayListService;
 public class PlayListServiceImpl implements PlayListService {
 
     private final PlayListRepository playListRepository;
-    private final AuthService authService;
+    private final SecurityUtil securityUtil;
     private final PlayListMapper playListMapper;
     private final VideoMapper videoMapper;
     private final PlayListVideoServiceImpl playListVideoService;
@@ -65,7 +64,7 @@ public class PlayListServiceImpl implements PlayListService {
     @Override
     @Transactional
     public void addPlayList(PlayListRequestDto playListRequestDto) {
-        User user = authService.getCurrentlyAuthentificatedUser();
+        User user = securityUtil.getCurrentUser();
         PlayList playList = playListMapper.mapToModel(playListRequestDto, user);
         playListRepository.save(playList);
     }
@@ -73,7 +72,7 @@ public class PlayListServiceImpl implements PlayListService {
     @Override
     @Transactional
     public void deletePlayList(UUID id) {
-        User user = authService.getCurrentlyAuthentificatedUser();
+        User user = securityUtil.getCurrentUser();
         PlayList playList = findByIdAndUser(id, user);
         playList.softDelete();
         playList.getVideoList().forEach(AbstractEntity::softDelete);
@@ -82,7 +81,7 @@ public class PlayListServiceImpl implements PlayListService {
     @Override
     @Transactional
     public void updatePlayList(UUID id, PlayListRequestDto playListRequestDto) {
-        User user = authService.getCurrentlyAuthentificatedUser();
+        User user = securityUtil.getCurrentUser();
         PlayList playList = findByIdAndUser(id, user);
         updateFields(playList, playListRequestDto);
     }

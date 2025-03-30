@@ -14,5 +14,5 @@ public interface AuthService {
 
     void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 
-    User getCurrentlyAuthentificatedUser();
+    User getCurrentlyAuthenticatedUser();
 }

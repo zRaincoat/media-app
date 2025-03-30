@@ -17,5 +17,6 @@ public class NotificationResponseDto {
     private NotificationType notificationType;
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
+    private boolean isRead;
     private VideoLowInfoResponseDto video;
 }

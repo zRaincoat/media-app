@@ -3,15 +3,12 @@ package org.stefan.media_app.services.impl;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.stefan.media_app.dtos.requests.UserRequestDto;
-import org.stefan.media_app.dtos.responses.PlayListResponseDto;
 import org.stefan.media_app.dtos.responses.UserResponseDto;
-import org.stefan.media_app.dtos.responses.UserWithAllDataResponseDto;
 import org.stefan.media_app.mappers.UserMapper;
 import org.stefan.media_app.models.User;
 import org.stefan.media_app.repositories.UserRepository;
@@ -68,10 +65,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserWithAllDataResponseDto getMe() {
+    public UserResponseDto getMe() {
         User user = securityUtil.getCurrentUser();
-        List<PlayListResponseDto> playLists = playListService.getAllPlayListsInfoByUser(user.getId());
-        return userMapper.mapToWithAllDataResponseDto(user, playLists);
+        return userMapper.mapToResponseDto(user);
     }
 
     private void setFields(UserRequestDto requestDto, User authUser) {

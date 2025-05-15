@@ -3,9 +3,12 @@ package org.stefan.media_app.repositories;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.stefan.media_app.dtos.responses.PlayListLowInfoResponseDto;
 import org.stefan.media_app.dtos.responses.PlayListResponseDto;
 import org.stefan.media_app.models.PlayList;
 import org.stefan.media_app.models.User;
@@ -59,4 +62,20 @@ public interface PlayListRepository extends JpaRepository<PlayList, UUID> {
             """)
     Optional<PlayListResponseDto> getPlayListInfoById(UUID playListId);
 
+    @Query("""
+            SELECT new org.stefan.media_app.dtos.responses.PlayListLowInfoResponseDto(
+                pl.id,
+                pl.title,
+                pl.createdAt,
+                pl.updatedAt,
+                COALESCE(COUNT(vl), 0)
+            )
+            FROM PlayList pl
+            LEFT JOIN pl.videoList vl
+            ON vl.deletedAt IS NULL
+            WHERE pl.author = :user
+            AND pl.deletedAt IS NULL
+            GROUP BY pl.id
+            """)
+    Page<PlayListLowInfoResponseDto> findAllByUser(Pageable pageable, User user);
 }

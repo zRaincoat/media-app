@@ -1,5 +1,6 @@
 package org.stefan.media_app.dtos.responses;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class PlayListLowInfoResponseDto {
     private UUID id;
     private String title;
-    private String createdAt;
-    private String updatedAt;
-    private int videoCount;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private long videoCount;
 }

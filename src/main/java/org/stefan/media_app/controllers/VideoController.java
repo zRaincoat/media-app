@@ -54,6 +54,7 @@ public class VideoController {
     }
 
     @PostMapping("/{id}/likes")
+    @ResponseStatus(HttpStatus.CREATED)
     public void likeVideo(@PathVariable UUID id) {
         log.info("Entering POST /videos/{}/like", id);
         videoService.likeVideo(id);
@@ -66,6 +67,7 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
     public VideoFullInfoResponseDto getVideo(@PathVariable UUID id) {
         log.info("Entering GET /videos/{}", id);
         return videoService.getVideo(id);

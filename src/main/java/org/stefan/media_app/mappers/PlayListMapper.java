@@ -28,8 +28,8 @@ public class PlayListMapper {
         return PlayListLowInfoResponseDto.builder()
                 .id(playList.getId())
                 .title(playList.getTitle())
-                .createdAt(playList.getCreatedAt() == null ? null : playList.getCreatedAt().toString())
-                .updatedAt(playList.getUpdatedAt() == null ? null : playList.getUpdatedAt().toString())
+                .createdAt(playList.getCreatedAt())
+                .updatedAt(playList.getUpdatedAt())
                 .videoCount(playListVideoCount)
                 .build();
     }

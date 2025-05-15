@@ -1,8 +1,9 @@
 package org.stefan.media_app.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.stefan.media_app.models.Video;
 
 public interface VideoSortStrategy {
-    List<Video> sortVideos();
+    Page<Video> sortVideos(Pageable pageable);
 }

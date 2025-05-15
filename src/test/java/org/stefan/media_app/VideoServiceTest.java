@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.stefan.media_app.dtos.requests.VideoRequestDto;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -242,29 +244,45 @@ public class VideoServiceTest {
 
     @Test
     void shouldReturnPagedVideosSortedByLikesAsc() {
-        List<Video> mockVideos = List.of(new Video(), new Video());
+        List<Video> domainVideos = List.of(new Video(), new Video());
         Pageable pageable = PageRequest.of(0, 2);
+        Page<Video> pageOfVideos = new PageImpl<>(domainVideos, pageable, domainVideos.size());
 
-        when(videoSortContext.getSortedVideos(VideoSortBy.LIKES_ASC)).thenReturn(mockVideos);
-        when(videoMapper.mapToResponseDto(any())).thenReturn(new VideoResponseDto());
+        when(videoSortContext.getSortedVideos(VideoSortBy.LIKES_ASC, pageable))
+                .thenReturn(pageOfVideos);
+        when(videoRepository.fetchWithPlayListsAndAuthors(domainVideos))
+                .thenReturn(domainVideos);
+        when(videoMapper.mapToResponseDto(any(Video.class)))
+                .thenReturn(new VideoResponseDto());
 
         Page<VideoResponseDto> result = videoService.getAllVideos(VideoSortBy.LIKES_ASC, pageable);
 
         assertEquals(2, result.getContent().size());
-        verify(videoSortContext).getSortedVideos(VideoSortBy.LIKES_ASC);
+        verify(videoSortContext).getSortedVideos(VideoSortBy.LIKES_ASC, pageable);
+        verify(videoRepository).fetchWithPlayListsAndAuthors(domainVideos);
+        verify(videoMapper, times(domainVideos.size()))
+                .mapToResponseDto(any(Video.class));
     }
 
     @Test
     void shouldReturnPagedVideosSortedByUpdatedAtDesc() {
-        List<Video> mockVideos = List.of(new Video());
+        List<Video> domainVideos = List.of(new Video());
         Pageable pageable = PageRequest.of(0, 1);
+        Page<Video> pageOfVideos = new PageImpl<>(domainVideos, pageable, domainVideos.size());
 
-        when(videoSortContext.getSortedVideos(VideoSortBy.UPDATED_AT_DESC)).thenReturn(mockVideos);
-        when(videoMapper.mapToResponseDto(any())).thenReturn(new VideoResponseDto());
+        when(videoSortContext.getSortedVideos(VideoSortBy.UPDATED_AT_DESC, pageable))
+                .thenReturn(pageOfVideos);
+        when(videoRepository.fetchWithPlayListsAndAuthors(domainVideos))
+                .thenReturn(domainVideos);
+        when(videoMapper.mapToResponseDto(any(Video.class)))
+                .thenReturn(new VideoResponseDto());
 
         Page<VideoResponseDto> result = videoService.getAllVideos(VideoSortBy.UPDATED_AT_DESC, pageable);
 
         assertEquals(1, result.getContent().size());
-        verify(videoSortContext).getSortedVideos(VideoSortBy.UPDATED_AT_DESC);
+        verify(videoSortContext).getSortedVideos(VideoSortBy.UPDATED_AT_DESC, pageable);
+        verify(videoRepository).fetchWithPlayListsAndAuthors(domainVideos);
+        verify(videoMapper, times(domainVideos.size()))
+                .mapToResponseDto(any(Video.class));
     }
 }

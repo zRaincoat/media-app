@@ -47,14 +47,12 @@ public class VideoController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteVideo(@PathVariable UUID id) {
         log.info("Entering DELETE /videos/{}", id);
         videoService.deleteVideo(id);
     }
 
     @PostMapping("/{id}/likes")
-    @ResponseStatus(HttpStatus.CREATED)
     public void likeVideo(@PathVariable UUID id) {
         log.info("Entering POST /videos/{}/like", id);
         videoService.likeVideo(id);

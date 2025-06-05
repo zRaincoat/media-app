@@ -47,7 +47,6 @@ public class VideoController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteVideo(@PathVariable UUID id) {
         log.info("Entering DELETE /videos/{}", id);
         videoService.deleteVideo(id);
@@ -66,6 +65,7 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
     public VideoFullInfoResponseDto getVideo(@PathVariable UUID id) {
         log.info("Entering GET /videos/{}", id);
         return videoService.getVideo(id);

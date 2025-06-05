@@ -1,11 +1,9 @@
 package org.stefan.media_app.services.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,9 +101,8 @@ public class VideoServiceImpl implements VideoService {
     @Override
     @Transactional(readOnly = true)
     public Page<VideoResponseDto> getAllVideos(VideoSortBy sort, Pageable pageable) {
-        List<Video> videos = videoSortContext.getSortedVideos(sort);
-        Page<Video> videoPage = new PageImpl<>(videos, pageable, videos.size());
-        videoRepository.fetchWithPlayListsAndAuthors(videoPage.getContent());
-        return videoPage.map(videoMapper::mapToResponseDto);
+        Page<Video> videos = videoSortContext.getSortedVideos(sort, pageable);
+        videoRepository.fetchWithPlayListsAndAuthors(videos.getContent());
+        return videos.map(videoMapper::mapToResponseDto);
     }
 }

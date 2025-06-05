@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.stefan.media_app.dtos.requests.PlayListRequestDto;
+import org.stefan.media_app.dtos.responses.PlayListLowInfoResponseDto;
 import org.stefan.media_app.dtos.responses.PlayListResponseDto;
 import org.stefan.media_app.dtos.responses.VideoResponseDto;
 import org.stefan.media_app.mappers.PlayListMapper;
@@ -84,6 +87,12 @@ public class PlayListServiceImpl implements PlayListService {
         User user = securityUtil.getCurrentUser();
         PlayList playList = findByIdAndUser(id, user);
         updateFields(playList, playListRequestDto);
+    }
+
+    @Override
+    public Page<PlayListLowInfoResponseDto> getPlayListsByAuthUser(Pageable pageable) {
+        User user = securityUtil.getCurrentUser();
+        return playListRepository.findAllByUser(pageable, user);
     }
 
     private void updateFields(PlayList playList, PlayListRequestDto playListRequestDto) {

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.stefan.media_app.enums.VideoSortBy;
 import org.stefan.media_app.factories.VideoFactory;
 import org.stefan.media_app.models.Video;
@@ -37,8 +41,13 @@ class VideoSortContextTest {
 
     private VideoSortContext videoSortContext;
 
+    private Pageable pageable;
+
     @BeforeEach
     void setUp() {
+        // Ініціалізуємо test pageable
+        pageable = PageRequest.of(0, 10);
+
         Map<String, VideoSortStrategy> strategies = new HashMap<>();
         strategies.put(VideoSortBy.LIKES_ASC.name(), likesAscStrategy);
         strategies.put(VideoSortBy.LIKES_DESC.name(), likesDescStrategy);
@@ -54,16 +63,18 @@ class VideoSortContextTest {
         Video v2 = VideoFactory.createVideo();
         v1.setLikes(10);
         v2.setLikes(20);
-        List<Video> mockVideos = List.of(v1, v2);
 
-        when(likesAscStrategy.sortVideos()).thenReturn(mockVideos);
+        // Мокуємо Page<Video> замість List
+        Page<Video> mockPage = new PageImpl<>(List.of(v1, v2), pageable, 2);
+        when(likesAscStrategy.sortVideos(pageable)).thenReturn(mockPage);
 
-        List<Video> sortedVideos = videoSortContext.getSortedVideos(VideoSortBy.LIKES_ASC);
+        Page<Video> sortedPage = videoSortContext.getSortedVideos(VideoSortBy.LIKES_ASC, pageable);
+        List<Video> sortedVideos = sortedPage.getContent();
 
         assertEquals(2, sortedVideos.size());
         assertTrue(sortedVideos.get(0).getLikes() < sortedVideos.get(1).getLikes());
 
-        verify(likesAscStrategy).sortVideos();
+        verify(likesAscStrategy).sortVideos(pageable);
     }
 
     @Test
@@ -72,16 +83,17 @@ class VideoSortContextTest {
         Video v2 = VideoFactory.createVideo();
         v1.setLikes(30);
         v2.setLikes(20);
-        List<Video> mockVideos = List.of(v1, v2);
 
-        when(likesDescStrategy.sortVideos()).thenReturn(mockVideos);
+        Page<Video> mockPage = new PageImpl<>(List.of(v1, v2), pageable, 2);
+        when(likesDescStrategy.sortVideos(pageable)).thenReturn(mockPage);
 
-        List<Video> sortedVideos = videoSortContext.getSortedVideos(VideoSortBy.LIKES_DESC);
+        Page<Video> sortedPage = videoSortContext.getSortedVideos(VideoSortBy.LIKES_DESC, pageable);
+        List<Video> sortedVideos = sortedPage.getContent();
 
         assertEquals(2, sortedVideos.size());
         assertTrue(sortedVideos.get(0).getLikes() > sortedVideos.get(1).getLikes());
 
-        verify(likesDescStrategy).sortVideos();
+        verify(likesDescStrategy).sortVideos(pageable);
     }
 
     @Test
@@ -90,16 +102,17 @@ class VideoSortContextTest {
         Video v2 = VideoFactory.createVideo();
         v1.setUpdatedAt(LocalDateTime.now().minusDays(2));
         v2.setUpdatedAt(LocalDateTime.now().minusDays(1));
-        List<Video> mockVideos = List.of(v1, v2);
 
-        when(updatedAtAscStrategy.sortVideos()).thenReturn(mockVideos);
+        Page<Video> mockPage = new PageImpl<>(List.of(v1, v2), pageable, 2);
+        when(updatedAtAscStrategy.sortVideos(pageable)).thenReturn(mockPage);
 
-        List<Video> sortedVideos = videoSortContext.getSortedVideos(VideoSortBy.UPDATED_AT_ASC);
+        Page<Video> sortedPage = videoSortContext.getSortedVideos(VideoSortBy.UPDATED_AT_ASC, pageable);
+        List<Video> sortedVideos = sortedPage.getContent();
 
         assertEquals(2, sortedVideos.size());
         assertTrue(sortedVideos.get(0).getUpdatedAt().isBefore(sortedVideos.get(1).getUpdatedAt()));
 
-        verify(updatedAtAscStrategy).sortVideos();
+        verify(updatedAtAscStrategy).sortVideos(pageable);
     }
 
     @Test
@@ -108,15 +121,17 @@ class VideoSortContextTest {
         v1.setUpdatedAt(LocalDateTime.now());
         Video v2 = VideoFactory.createVideo();
         v2.setUpdatedAt(LocalDateTime.now().minusDays(1));
-        List<Video> mockVideos = List.of(v1, v2);
 
-        when(updatedAtDescStrategy.sortVideos()).thenReturn(mockVideos);
+        Page<Video> mockPage = new PageImpl<>(List.of(v1, v2), pageable, 2);
+        when(updatedAtDescStrategy.sortVideos(pageable)).thenReturn(mockPage);
 
-        List<Video> sortedVideos = videoSortContext.getSortedVideos(VideoSortBy.UPDATED_AT_DESC);
+        Page<Video> sortedPage = videoSortContext.getSortedVideos(VideoSortBy.UPDATED_AT_DESC, pageable);
+        List<Video> sortedVideos = sortedPage.getContent();
 
         assertEquals(2, sortedVideos.size());
         assertTrue(sortedVideos.get(0).getUpdatedAt().isAfter(sortedVideos.get(1).getUpdatedAt()));
 
-        verify(updatedAtDescStrategy).sortVideos();
+        verify(updatedAtDescStrategy).sortVideos(pageable);
     }
 }
+

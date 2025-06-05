@@ -3,7 +3,8 @@ package org.stefan.media_app.repositories;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.stefan.media_app.models.User;
@@ -58,12 +59,12 @@ public interface VideoRepository extends JpaRepository<Video, UUID> {
             """)
     List<Video> findByPlayListId(UUID playListId);
 
-    @Query("""
+    @Query(value = """
             SELECT v
             FROM Video v
             WHERE v.deletedAt IS NULL
             """)
-    List<Video> findAllSorted(Sort sort);
+    Page<Video> findAllSorted(Pageable pageable);
 
     @Query("""
             SELECT v

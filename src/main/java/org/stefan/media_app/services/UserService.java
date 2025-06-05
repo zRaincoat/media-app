@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.UUID;
 import org.stefan.media_app.dtos.requests.UserRequestDto;
 import org.stefan.media_app.dtos.responses.UserResponseDto;
-import org.stefan.media_app.dtos.responses.UserWithAllDataResponseDto;
 import org.stefan.media_app.models.User;
 
 public interface UserService {
@@ -22,5 +21,5 @@ public interface UserService {
 
     UserResponseDto getUserById(UUID id);
 
-    UserWithAllDataResponseDto getMe();
+    UserResponseDto getMe();
 }

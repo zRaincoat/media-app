@@ -38,13 +38,7 @@ public class PlayListServiceImpl implements PlayListService {
     public List<PlayListResponseDto> getAllPlayListsInfoByUser(UUID userId) {
         List<PlayListResponseDto> responseDtos = playListRepository.getPlayListsInfoByUser(userId);
         Map<UUID, List<Video>> videoMap = playListVideoService.getPlayListIdsToVideosByUserId(userId);
-        responseDtos.forEach(playListResponseDto -> {
-            List<VideoResponseDto> videoResponseDtos = videoMap.getOrDefault(playListResponseDto.getId(), new ArrayList<>())
-                    .stream()
-                    .map(videoMapper::mapToResponseDto)
-                    .toList();
-            playListResponseDto.setVideos(videoResponseDtos);
-        });
+        setVideosToResponse(responseDtos, videoMap);
         return responseDtos;
     }
 
@@ -97,5 +91,15 @@ public class PlayListServiceImpl implements PlayListService {
 
     private void updateFields(PlayList playList, PlayListRequestDto playListRequestDto) {
         playList.setTitle(playListRequestDto.getTitle());
+    }
+
+    private void setVideosToResponse(List<PlayListResponseDto> responseDtos, Map<UUID, List<Video>> videoMap) {
+        responseDtos.forEach(playListResponseDto -> {
+            List<VideoResponseDto> videoResponseDtos = videoMap.getOrDefault(playListResponseDto.getId(), new ArrayList<>())
+                    .stream()
+                    .map(videoMapper::mapToResponseDto)
+                    .toList();
+            playListResponseDto.setVideos(videoResponseDtos);
+        });
     }
 }

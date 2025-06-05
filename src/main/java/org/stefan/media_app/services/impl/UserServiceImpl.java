@@ -12,7 +12,6 @@ import org.stefan.media_app.dtos.responses.UserResponseDto;
 import org.stefan.media_app.mappers.UserMapper;
 import org.stefan.media_app.models.User;
 import org.stefan.media_app.repositories.UserRepository;
-import org.stefan.media_app.services.PlayListService;
 import org.stefan.media_app.services.UserService;
 
 @Service
@@ -21,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PlayListService playListService;
     private final SecurityUtil securityUtil;
     private final LogoutUtil logoutUtil;
 

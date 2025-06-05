@@ -47,33 +47,41 @@ A **clean, test-driven Spring Boot backend** for cataloguing and sharing media (
 
 ### Run the Project 💻
 
-* **1)Clone the repository**
+**1) Clone the repository**
 
-# git clone https://github.com/zRaincoat/media-app.git
-# cd media-app
+```bash
+git clone https://github.com/zRaincoat/media-app.git
+cd media-app
+```
 
-* **2)Configure PostgreSQL locally**
-# Add application properties
-# Create src/main/resources/application.properties (or application.yml) with your DB creds:
+**2) Configure PostgreSQL locally**
 
-# spring.datasource.url=jdbc:postgresql://localhost:5432/media_app
-# spring.datasource.username=media
-# spring.datasource.password=secret
+- Add application properties  
+- Create `src/main/resources/application.properties` (or `application.yml`) with your DB creds:
 
-* **3)Import the Postman collection**
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/media_app
+spring.datasource.username=media
+spring.datasource.password=secret
+```
 
-# File: media_app.postman_collection.json (in the repo root).
+**3) Import the Postman collection**
 
-# Open Postman → Import → select the file.
+File: `media_app.postman_collection.json` (in the repo root).
 
-* **4)Run the application with Maven**
+```text
+Open Postman → Import → select the file
+```
 
-# mvn spring-boot:run
+**4) Run the application with Maven**
+
+```bash
+mvn spring-boot:run
 # or build & run the jar
-# mvn -Pprod clean package
-# java -jar target/media-app-*.jar
+mvn -Pprod clean package
+java -jar target/media-app-*.jar
+```
 
-# The API starts at http://localhost:8080.
+The API starts at `http://localhost:8080`.
 
-* **5)Register, login, enjoy — all in Postman**
-
+**5) Register, login, enjoy — all in Postman**

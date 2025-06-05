@@ -15,10 +15,10 @@ A **clean, test-driven Spring Boot backend** for cataloguing and sharing media (
 
 | Pain point | How Media-App helps |
 |------------|--------------------|
-| ❌ Every side-project starts with the same boilerplate—security, persistence, error handling. | ✅ Pre-configured Spring Security + JWT and full CRUD scaffolding. |
+| ❌ Every side-project starts with the same boilerplate—security, persistence, error handling. | ✅ Pre-configured Spring Security and full CRUD scaffolding. |
 | ❌ Hidden N + 1 queries tank performance. | ✅ JPA fetch plans & query hints remove N + 1 issues; SQL logs covered by integration tests. |
 | ❌ Manual deployment and flaky builds waste time. | ✅ **CI/CD with GitHub Actions**: every push runs tests & builds a verified artifact. |
-| ❌ “Works on my machine” DB config. | ✅ **Docker-friendly Postgres** setup; just tweak one env block and go. |
+| ❌ Code without tests breaks after each push | ✅ **Code covered with unit tests that run before each PR** |
 
 ---
 

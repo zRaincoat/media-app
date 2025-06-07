@@ -28,7 +28,7 @@ A **clean, test-driven Spring Boot backend** for cataloguing and sharing media (
 |-------|----------------|-----|
 | Runtime | **Spring Boot 3** | Rapid setup & production-ready defaults |
 | Persistence | **PostgreSQL** + **Spring Data JPA** | Powerful SQL, declarative repositories |
-| Security | **Spring Security** (JWT) | Stateless auth with token support out of the box |
+| Security | **Spring Security** | Stateless auth with token support out of the box |
 | Build | **Maven** | Convention > config, huge plugin ecosystem |
 | Logging | **SLF4J** | Flexible binding, structured logs |
 | Dev & Ops | **GitHub Actions CI** | Lint → test → package on every push |
